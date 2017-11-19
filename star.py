@@ -30,7 +30,7 @@ class Star(object):
         info_list.append(self.profession)
         self.zodiac = None
         info_list.append(self.zodiac)
-        self.gender = None
+        self.gender = 'male'
         info_list.append(gender)
         self.height = None
         info_list.append(self.height)
