@@ -1,2 +1,2 @@
-scrapy=1.4.0
+scrapy==1.4.0
 mysqlclient
