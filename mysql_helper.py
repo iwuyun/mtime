@@ -8,15 +8,16 @@ class mysql_connection_wrapper(object):
             db_args = DATABASE
         self.connect = MySQLdb.connect(user=db_args['user'],
                                        passwd=db_args['password'],
-                                       db=db_args_args['db'],
+                                       db=db_args['db'],
                                        charset='utf8')
         self.cursor = self.connect.cursor()
 
     def insert_row(self, info_list):
-        sql = 'insert star_info value("{}", "{}", "{}", {}, "{}", "{}", "{}",\
-            "{}", "{}", "{}", "{}", "{}")'
+        sql_pat = 'insert star_info value({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {})'
+        sql = sql_pat.format(*tuple(info_list))
         try:
-            self.cursor.execute(sql.format(*tuple(info_list)))
+            self.cursor.execute(sql)
+            self.connect.commit()
             print 'Saved information of {}'.format(info_list[0])
         except MySQLdb.Error as e:
             self.connect.rollback()

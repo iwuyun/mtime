@@ -3,7 +3,6 @@
 import MySQLdb
 
 star_info_list = [
-    'biography',
     'name',
     'english_name',
     'profession',
@@ -15,42 +14,49 @@ star_info_list = [
     'birthday',
     'birthplace',
     'relationship',
+    'biography',
 ]
 
 
 class Star(object):
     def __init__(self):
-        self.info = []
-        info_list = self.info
+        self.info = {}
         self.name = None
-        info_list.append(self.name)
         self.english_name = None
-        info_list.append(self.english_name)
         self.profession = None
-        info_list.append(self.profession)
         self.zodiac = None
-        info_list.append(self.zodiac)
         self.gender = 'male'
-        info_list.append(gender)
         self.height = None
-        info_list.append(self.height)
         self.weight = None
-        info_list.append(self.weight)
         self.blood_group = None
-        info_list.append(self.blood_group)
         self.birthday = None
-        info_list.append(self.birthday)
         self.birthplace = None
-        info_list.append(self.birthplace)
         self.biography = None
-        info_list.append(self.biography)
         self.relationship = None
-        info_list.append(self.relationship)
+
+    def update_info(self):
+        self.info.update({'name': self.name})
+        self.info.update({'english_name': self.english_name})
+        self.info.update({'profession': self.profession})
+        self.info.update({'zodiac': self.zodiac})
+        self.info.update({'gender': self.gender})
+        self.info.update({'height': self.height})
+        self.info.update({'weight': self.weight})
+        self.info.update({'blood_group': self.blood_group})
+        self.info.update({'birthday': self.birthday})
+        self.info.update({'birthplace': self.birthday})
+        self.info.update({'biography': self.biography})
+        self.info.update({'relationship': self.relationship})
 
     def save_star_info(self, connection_wrapper):
         info_list = []
-        for item in self.info:
-            if item is not None and isinstance(item, (unicode, str)):
-                item = MySQLdb.escape_string(item)
+        for key in star_info_list:
+            item = self.info[key]
+            if item is None:
+                item = 'null'
+            elif isinstance(item, unicode):
+                item = '"{}"'.format(MySQLdb.escape_string(item.encode('utf8')))
+            elif isinstance(item, str):
+                item = '"{}"'.format(MySQLdb.escape_string(item))
             info_list.append(item)
         connection_wrapper.insert_row(info_list)
